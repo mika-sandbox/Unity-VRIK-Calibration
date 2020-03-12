@@ -17,6 +17,17 @@ namespace Mochizuki.VR.SteamVR
 
         public void Calibrate(VRIK avatar, Vector3 viewPosition)
         {
+            if (InputSource != SteamVR_Input_Sources.Head)
+            {
+                Calibrate(avatar);
+                return;
+            }
+
+            var target = TargetObject.transform;
+            var diff = viewPosition - (avatar.references.head.position - avatar.references.root.position);
+
+            target.localPosition = -diff;
+            target.rotation = transform.rotation;
         }
     }
 }
