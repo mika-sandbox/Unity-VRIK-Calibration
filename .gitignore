@@ -73,6 +73,7 @@ crashlytics-build.properties
 /[Aa]ssets/_TerrainAutoUpgrade/*
 /[Aa]ssets/Booth/*
 /[Aa]ssets/DynamicBone/*
+/[Aa]ssets/HTC.UnityPlugin/*
 /[Aa]ssets/Plugins/RootMotion/*
 /[Aa]ssets/SteamVR/*
 /[Aa]ssets/SteamVR_Resources/*
