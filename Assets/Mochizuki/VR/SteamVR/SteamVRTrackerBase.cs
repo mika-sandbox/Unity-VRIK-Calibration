@@ -107,7 +107,7 @@ namespace Mochizuki.VR.SteamVR
         }
 
         // ReSharper disable once ParameterHidesMember
-        private Vector3 GetNearestAxis(Vector3 vector, Transform transform)
+        private static Vector3 GetNearestAxis(Vector3 vector, Transform transform)
         {
             var vector1 = Vector3.Dot(vector, transform.right);
             var vector2 = Vector3.Dot(vector, transform.up);
