@@ -80,27 +80,27 @@ namespace Mochizuki.VR.SteamVR
         }
 
         // ReSharper disable once ParameterHidesMember
-        private void CalibrateLeg(VRIK avatar, Transform transform)
+        private void CalibrateLeg(VRIK avatar, Transform lastFootBone)
         {
             // adjust tracker position to last transform position
             var target = TargetObject.transform;
-            target.position = new Vector3(target.position.x, transform.position.y - avatar.references.root.position.y, target.position.z);
+            target.position = new Vector3(target.position.x, lastFootBone.position.y - avatar.references.root.position.y, target.position.z);
 
             // matches the tracker rotation and last transform rotation
-            target.rotation = transform.rotation;
+            target.rotation = lastFootBone.rotation;
 
             // align the target forward axis with the tracker forward axis. the other axis remain unchanged.
-            var forwardOfTracker = GetNearestAxis(avatar.references.root.forward, this.transform);
-            var toForwardVector = this.transform.rotation * forwardOfTracker;
+            var forwardOfTracker = GetNearestAxis(avatar.references.root.forward, transform);
+            var toForwardVector = transform.rotation * forwardOfTracker;
 
-            var forwardOfTransform = GetNearestAxis(avatar.references.root.forward, transform);
-            var fromForwardVector = transform.rotation * forwardOfTransform;
+            var forwardOfTransform = GetNearestAxis(avatar.references.root.forward, lastFootBone);
+            var fromForwardVector = lastFootBone.rotation * forwardOfTransform;
 
             // remove upwards/downwards vector
             toForwardVector.y = fromForwardVector.y;
 
             // rotate transform
-            var angle = Vector3.Angle(transform.rotation * fromForwardVector, target.rotation * toForwardVector);
+            var angle = Vector3.Angle(lastFootBone.rotation * fromForwardVector, target.rotation * toForwardVector);
             var axis = -Vector3.Cross(toForwardVector, fromForwardVector);
 
             target.rotation = Quaternion.AngleAxis(angle, axis) * target.rotation;
