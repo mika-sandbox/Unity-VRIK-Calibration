@@ -42,7 +42,13 @@ namespace Mochizuki.VR.SteamVR
                     break;
 
                 case SteamVR_Input_Sources.Waist:
+                {
+                    // adjust tracker position to transform position
+                    var target = TargetObject.transform;
+                    target.transform.position = avatar.references.pelvis.position - avatar.references.root.position;
+                    target.transform.rotation = avatar.references.pelvis.rotation;
                     break;
+                }
 
                 case SteamVR_Input_Sources.Head:
                     Debug.LogWarning("<b>[Mochizuki.VR]</b> Warning: Please use SteamVRHMD#Calibrate for calibrating head tracker.");
