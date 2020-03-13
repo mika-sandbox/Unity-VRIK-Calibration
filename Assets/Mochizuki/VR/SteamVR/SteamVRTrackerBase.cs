@@ -45,6 +45,7 @@ namespace Mochizuki.VR.SteamVR
                     break;
 
                 case SteamVR_Input_Sources.Head:
+                    Debug.LogWarning("<b>[Mochizuki.VR]</b> Warning: Please use SteamVRHMD#Calibrate for calibrating head tracker.");
                     break;
 
                 case SteamVR_Input_Sources.LeftKnee:
