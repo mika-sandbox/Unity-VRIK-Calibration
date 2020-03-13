@@ -90,7 +90,9 @@ namespace Mochizuki.VR.SteamVR
 
             // 1st, matches wrist-to-palm vector to tracker forward
             var trackerUpVector = transform.up;
-            var handUpVector = handBone.rotation * Vector3.Cross(arm.wristToPalmAxis, arm.palmToThumbAxis) * (isLeft ? 1 : -1);
+            var handUpVector = handBone.rotation * Vector3.Cross(arm.wristToPalmAxis, arm.palmToThumbAxis);
+            if (handUpVector.y < 0)
+                handUpVector = -handUpVector;
 
             var angle1 = Vector3.Angle(trackerUpVector, handUpVector);
             var axis1 = -Vector3.Cross(trackerUpVector, handUpVector);
