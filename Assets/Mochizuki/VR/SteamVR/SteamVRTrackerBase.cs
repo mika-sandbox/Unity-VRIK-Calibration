@@ -26,11 +26,11 @@ namespace Mochizuki.VR.SteamVR
             switch (InputSource)
             {
                 case SteamVR_Input_Sources.LeftHand:
-                    CalibrateHand(avatar, avatar.references.leftHand);
+                    CalibrateHand(avatar.references.leftHand, avatar.solver.leftArm, true);
                     break;
 
                 case SteamVR_Input_Sources.RightHand:
-                    CalibrateHand(avatar, avatar.references.rightHand);
+                    CalibrateHand(avatar.references.rightHand, avatar.solver.rightArm, false);
                     break;
 
                 case SteamVR_Input_Sources.LeftFoot:
@@ -81,8 +81,30 @@ namespace Mochizuki.VR.SteamVR
             }
         }
 
-        private void CalibrateHand(VRIK avatar, Transform transform)
+        private void CalibrateHand(Transform handBone, IKSolverVR.Arm arm, bool isLeft)
         {
+            // adjust tracker position to transform position (neck)
+            var target = TargetObject.transform;
+
+            // matches the rotation but the pose of player does not necessarily matches the pose of the model
+
+            // 1st, matches wrist-to-palm vector to tracker forward
+            var trackerUpVector = transform.up;
+            var handUpVector = handBone.rotation * Vector3.Cross(arm.wristToPalmAxis, arm.palmToThumbAxis) * (isLeft ? 1 : -1);
+
+            var angle1 = Vector3.Angle(trackerUpVector, handUpVector);
+            var axis1 = -Vector3.Cross(trackerUpVector, handUpVector);
+
+            target.rotation = Quaternion.AngleAxis(angle1, axis1) * target.rotation;
+
+            // 2nd, matches hand upward (downward) vector to tracker upward (downward)
+            var trackerDownVector = -trackerUpVector;
+            var currentForwardVector = target.forward;
+
+            var angle2 = Vector3.Angle(trackerDownVector, currentForwardVector);
+            var axis2 = -Vector3.Cross(trackerDownVector, currentForwardVector);
+
+            target.rotation = Quaternion.AngleAxis(angle2, axis2) * target.rotation;
         }
 
         // ReSharper disable once ParameterHidesMember
